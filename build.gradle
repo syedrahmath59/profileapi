@@ -1,0 +1,64 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '2.1.7.RELEASE'
+    id 'io.spring.dependency-management' version '1.0.8.RELEASE'
+    id 'war'
+}
+
+group 'com.profile.api'
+version '1.0-SNAPSHOT'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+    implementation 'org.springframework.boot:spring-boot-starter'
+    compile("org.springframework.boot:spring-boot-starter-web")
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+}
+
+//Configures the classpath and the source and resource directories
+//of the integrationTest task.
+sourceSets {
+    //Declaring this source set creates compile time and runtime configurations for it.
+    integrationTest {
+        java {
+            compileClasspath += main.output + test.output
+            runtimeClasspath += main.output + test.output
+            srcDir file('src/integration-test/java')
+        }
+        resources.srcDir file('src/integration-test/resources')
+    }
+}
+//Configures the compile and runtime configurations for our integration tests
+//and includes the dependencies of the test task.
+configurations {
+    integrationTestCompile.extendsFrom testImplementation
+    integrationTestRuntime.extendsFrom testImplementation
+}
+
+//Create the task that runs the integration tests found from the
+//configured source directory and uses the correct classpath.
+task integrationTest(type: Test) {
+    testClassesDirs = sourceSets.integrationTest.output.classesDirs
+    classpath = sourceSets.integrationTest.runtimeClasspath
+    //If you want to ensure that integration tests are run every time when you invoke
+    //this task, uncomment the following line.
+    outputs.upToDateWhen { false }
+}
+
+test {
+    //we want display the following test events
+    testLogging {
+        events "PASSED", "STARTED", "FAILED", "SKIPPED"
+    }
+}
+//Ensure that the check task fails the build if there are failing integration tests.
+check.dependsOn integrationTest
+//Ensure that our unit tests are run before our integration tests
+integrationTest.mustRunAfter test
