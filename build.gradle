@@ -50,6 +50,9 @@ task integrationTest(type: Test) {
     //If you want to ensure that integration tests are run every time when you invoke
     //this task, uncomment the following line.
     outputs.upToDateWhen { false }
+    testLogging {
+        events "PASSED", "STARTED", "FAILED", "SKIPPED"
+    }
 }
 
 test {
