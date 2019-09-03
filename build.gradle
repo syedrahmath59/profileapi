@@ -51,7 +51,7 @@ task integrationTest(type: Test) {
     classpath = sourceSets.integrationTest.runtimeClasspath
     //If you want to ensure that integration tests are run every time when you invoke
     //this task, uncomment the following line.
-    outputs.upToDateWhen { false }
+   // outputs.upToDateWhen { false }
     testLogging {
         events "PASSED", "STARTED", "FAILED", "SKIPPED"
     }
