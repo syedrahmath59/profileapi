@@ -21,7 +21,9 @@ dependencies {
     compile("org.springframework.boot:spring-boot-starter-web")
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
-
+war {
+    enabled=true
+}
 //Configures the classpath and the source and resource directories
 //of the integrationTest task.
 sourceSets {
